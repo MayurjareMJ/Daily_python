@@ -1,9 +1,9 @@
-name: Auto Commit Every Minute
+name: Auto Commit Every 5 Minutes
 
 on:
   schedule:
-    - cron: '* * * * *'  # Runs every minute
-  workflow_dispatch:      # Optional manual trigger
+    - cron: '*/5 * * * *'  # Every 5 minutes
+  workflow_dispatch:        # Manual trigger if needed
 
 jobs:
   auto-commit:
@@ -13,14 +13,17 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v3
 
-      - name: Make a change (timestamp file)
+      - name: Make a change (update timestamp)
         run: |
           echo "Updated at: $(date)" > minute-update.txt
 
       - name: Commit and push changes
+        env:
+          PAT_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name 'MayurJare'
-          git config --global user.email 'your-email@example.com'
+          git config --global user.email 'your_email@example.com'
+          git remote set-url origin https://MayurJare:${PAT_TOKEN}@github.com/MayurjareMJ/Daily_python.git
           git add .
-          git commit -m "Auto-commit every minute: $(date)" || echo "Nothing to commit"
+          git commit -m "Auto-commit every 5 minutes: $(date)" || echo "No changes"
           git push
