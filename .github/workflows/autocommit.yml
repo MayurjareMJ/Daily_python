@@ -1,9 +1,9 @@
-name: Daily Auto Commit
+name: Auto Commit Every Minute
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Daily at 00:00 UTC
-  workflow_dispatch:
+    - cron: '* * * * *'  # Runs every minute
+  workflow_dispatch:      # Optional manual trigger
 
 jobs:
   auto-commit:
@@ -13,14 +13,14 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v3
 
-      - name: Make a daily change
+      - name: Make a change (timestamp file)
         run: |
-          echo "Last updated on: $(date)" > daily-update.txt
+          echo "Updated at: $(date)" > minute-update.txt
 
       - name: Commit and push changes
         run: |
-          git config --global user.name 'YOUR_GITHUB_USERNAME'
-          git config --global user.email 'YOUR_EMAIL@example.com'
+          git config --global user.name 'MayurJare'
+          git config --global user.email 'your-email@example.com'
           git add .
-          git commit -m "Daily auto-commit: $(date)" || echo "Nothing to commit"
+          git commit -m "Auto-commit every minute: $(date)" || echo "Nothing to commit"
           git push
