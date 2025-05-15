@@ -1,0 +1,26 @@
+name: Daily Auto Commit
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Daily at 00:00 UTC
+  workflow_dispatch:
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Make a daily change
+        run: |
+          echo "Last updated on: $(date)" > daily-update.txt
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'YOUR_GITHUB_USERNAME'
+          git config --global user.email 'YOUR_EMAIL@example.com'
+          git add .
+          git commit -m "Daily auto-commit: $(date)" || echo "Nothing to commit"
+          git push
